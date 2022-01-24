@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ContactListActivity">
 
     <LinearLayout
         android:layout_width="409dp"
@@ -41,4 +41,5 @@
             app:srcCompat="@drawable/settings"
             tools:ignore="RedundantDescriptionCheck" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

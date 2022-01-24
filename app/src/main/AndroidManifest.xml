@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ContactListProject">
         <activity
+            android:name=".ContactSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactMapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ContactListActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

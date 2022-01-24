@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">ContactListProject</string>
+    <string name="button_to_display_the_location_of_each_contact">Button to display the location of each contact.</string>
+    <string name="button_to_display_a_list_of_contacts">Button to display a list of contacts</string>
+    <string name="button_to_display_the_settings">Button to display the settings.</string>
 </resources>
