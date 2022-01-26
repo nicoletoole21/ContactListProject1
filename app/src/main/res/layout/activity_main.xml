@@ -242,7 +242,7 @@
                 android:inputType="phone"
                 android:nextFocusDown="@+id/editEMail"
                 app:layout_constraintStart_toStartOf="@id/textCell"
-                tools:layout_editor_absoluteY="265dp" />
+                app:layout_constraintTop_toBottomOf="@+id/textCell" />
 
             <TextView
                 android:id="@+id/textEMail"
@@ -287,7 +287,7 @@
                 app:layout_constraintTop_toBottomOf="@id/editEMail" />
 
             <Button
-                android:id="@+id/btnBirthday"
+                android:id="@+id/buttonBirthday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="60dp"
