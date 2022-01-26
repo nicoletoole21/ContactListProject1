@@ -7,12 +7,14 @@
     tools:context=".ContactMapActivity">
 
     <LinearLayout
-        android:layout_width="409dp"
+        android:id="@+id/navigationBar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/navbar_background"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="1dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageButton
             android:id="@+id/imageButtonList"
@@ -20,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/button_to_display_a_list_of_contacts"
-            app:srcCompat="@drawable/contactlisticon"
+            app:srcCompat="@drawable/contactlisticon1"
             tools:ignore="RedundantDescriptionCheck" />
 
         <ImageButton
@@ -28,8 +30,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="@string/button_to_display_the_location_of_each_contact"
-            app:srcCompat="@drawable/mapicon"
+            android:contentDescription="@string/button_to_display_a_map_of_contacts"
+            app:srcCompat="@drawable/mapicon1"
             tools:ignore="RedundantDescriptionCheck" />
 
         <ImageButton
@@ -37,10 +39,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:contentDescription="@string/button_to_display_the_settings"
-            app:srcCompat="@drawable/settings"
+            android:contentDescription="@string/button_to_display_the_settings1"
+            app:srcCompat="@drawable/settingsicon"
             tools:ignore="RedundantDescriptionCheck" />
     </LinearLayout>
+
 
 
 

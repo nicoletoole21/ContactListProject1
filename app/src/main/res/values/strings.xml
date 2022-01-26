@@ -7,4 +7,8 @@
     <string name="save">Save</string>
     <string name="save">Save</string>
     <string name="toggleButton">ToggleButton</string>
+    <string name="button_to_display_a_list_of_contacts">Button to display a list of contacts</string>
+    <string name="contact">Contact</string>
+    <string name="button_to_display_a_map_of_contacts">Button to display a map of contacts</string>
+    <string name="button_to_display_the_settings1">Button to display the settings</string>
 </resources>
