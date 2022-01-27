@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
         initToggleButton();
         setForEditing(false);
+        initChangeDateButton();
 
     }
 

@@ -11,14 +11,18 @@ import android.widget.CalendarView;
 import androidx.fragment.app.DialogFragment;
 
 public class DatePickerDialog extends DialogFragment {
+
     Calendar selectedDate;
+
     public interface SaveDateListener {
+
         void didFinishDatePickerDialog(Calendar selectedTime);
     }
     public DatePickerDialog() {
 
     }
 @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.select_date,container);
@@ -37,6 +41,7 @@ public class DatePickerDialog extends DialogFragment {
         saveButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+
                 saveItem(selectedDate);
             }
         });
