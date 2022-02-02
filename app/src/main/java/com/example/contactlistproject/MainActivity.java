@@ -12,15 +12,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-
 import java.util.Calendar;
-
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.SaveDateListener {
-
+    private Contact currentContact;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        currentContact = new Contact();
 
         initListButton();
         initMapButton();
@@ -29,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         initToggleButton();
         setForEditing(false);
         initChangeDateButton();
+initTextChangedEvents;
 
     }
 
@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         TextView birthday =
                 findViewById(R.id.textBirthday);
          birthday.setText(DateFormat.format("MM/dd/yyyy", selectedTime));
+        currentContact.setBirthday(selectedTime);
 
 
 
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 DatePickerDialog datePickerDialog = new DatePickerDialog();
                 datePickerDialog.show(fm,"DatePick");
             }
+            private
         });
     }
 }
