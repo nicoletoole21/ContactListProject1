@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 //reference created for current activity and which activity to start)
                 Intent intent = new Intent (MainActivity.this, ContactSettingsActivity.class);
                 //intent flag set to alert the operating system to not make multiple copies of same activity
+
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
