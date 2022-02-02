@@ -34,9 +34,9 @@ public class ContactDataSource {
             initialValues.put("zipcode", c.getZipCode());
             initialValues.put("phonenumber", c.getPhoneNumber());
             initialValues.put("cellnumber", c.getCellNumber());
-            initialValues.put("email", c.getEmail());
+            initialValues.put("email", c.geteMail());
             initialValues.put("birthday", String.valueOf(c.getBirthday().getTimeInMillis()));
-            didSuceed = database.insert("contact", null, initialValues) > 0;
+            didSucceed = database.insert("contact", null, initialValues) > 0;
         } catch (Exception e) {
         }
         return didSucceed;
@@ -54,9 +54,9 @@ public class ContactDataSource {
             updateValues.put("zipcode", c.getZipCode());
             updateValues.put("phonenumber", c.getPhoneNumber());
             updateValues.put("cellnumber", c.getCellNumber());
-            updateValues.put("email", c.getEmail());
+            updateValues.put("email", c.geteMail());
             updateValues.put("birthday", String.valueOf(c.getBirthday().getTimeInMillis()));
-            didSucceed = database.insert("contact", updateValues, "_id=" + rowId, null) > 0;
+            didSucceed = database.update("contact", updateValues, "_id=" + rowId, null) > 0;
         } catch (Exception e) {
         }
         return didSucceed;
