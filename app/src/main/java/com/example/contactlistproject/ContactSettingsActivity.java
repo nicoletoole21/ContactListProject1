@@ -22,6 +22,7 @@ public class ContactSettingsActivity extends AppCompatActivity {
         initListButton();
         initSortByClick();
         initSortOrderClick();
+        initSettings();
 
     }
 

@@ -16,6 +16,7 @@ public class ContactDataSource{
         database = dbHelper.getWritableDatabase();
     }
     public void close() {
+
         dbHelper.close();
     }
 }
