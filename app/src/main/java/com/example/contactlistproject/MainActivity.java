@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         etContactName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                currentContact.setContactName(etCity.getText().toString());
+                currentContact.setCity(etCity.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -198,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         etContactName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                currentContact.setContactName(etState.getText().toString());
+                currentContact.setState(etState.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         etContactName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                currentContact.setContactName(etZipcode.getText().toString());
+                currentContact.setZipCode(etZipcode.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         etContactName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                currentContact.setContactName(etHomePhone.getText().toString());
+                currentContact.setPhoneNumber(etHomePhone.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         etContactName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                currentContact.setContactName(etCellPhone.getText().toString());
+                currentContact.setCellNumber(etCellPhone.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         etContactName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                currentContact.setContactName(eteMail.getText().toString());
+                currentContact.seteMail(eteMail.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
