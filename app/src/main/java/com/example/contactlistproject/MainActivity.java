@@ -1,7 +1,9 @@
 package com.example.contactlistproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements DatePickerDialog.SaveDateListener {
     private Contact currentContact;
@@ -326,3 +330,320 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
 }
 
+
+
+
+
+
+       /**6.3
+ContactDataSource ds = new ContactDataSource(this);
+ArrayList<String> names;
+
+try{
+    ds.open();
+    names =ds.getContactName();
+    ds.close();
+    RecyclerView contactList = findViewById(R.id.rvContacts);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+    contactList.setLayoutManager(layoutManager);
+    ContactAdapter contactAdapter = new ContactAdapter(names);
+        }
+catch (Exception e) {
+    Toast.makeText(this, "Error retrieving contacts", Toast.LENGTH_LONG).show();
+        }
+
+6.4
+
+public class ContactAdapter extends RecyclerView.Adapter{
+    private ArrayList<String> contactData;
+    private View.OnClickListener mOnItemClickListener;
+
+    public class ContactViewHolder extends RecyclerView.ViewHolder{
+        public TextView textViewContact;
+        public ContactViewHolder(@NonNull View itemView){
+            super(itemView);
+            textViewContact = itemView.findViewById(R.id.textViewName;
+            itemView.setTag(this);
+            itemView.setOnClickListener(mOnItemClickListener);
+        }
+        public TextView getContactTextView() {
+            return textViewContact;
+        }
+        }
+        public ContactAdapter(ArrayList<String> arrayList){
+        contactData= arrayList;
+         }
+       public void setOnItemClickListener(View.OnClickListener itemClickListener){
+        mOnItemClickListener = itemClickListener;
+        }
+
+        @NonNull
+        @Override
+public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.simple_item_view, parent,false)}:
+       return new ContactViewHolder(v);
+}
+@Override
+public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    ContactViewHolder cvh = (ContactViewHolder) holder;
+    cvh.getContactTextView().setText(contactData.get(position));
+        }
+@Override
+public int getItemCount(){
+    return contactData.size();
+        }
+
+6.5
+private View.OnClickListener onItemClickListener = new View.OnClickListener(){
+    @Override
+        public void onClick(View view){
+        RecyclerView. ViewHolder viewHolder = (RecyclerView.ViewHolder)view.getTag();
+        int position = viewHolder.getAdapterPosition();
+        Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
+        startActivity(intent);
+        )
+        };
+        }
+
+6.6
+public ArrayList<Contact> getContacts() {
+    ArrayList<Contact> contacts = new ArrayList<Contact>();
+    try{
+        String query ="SELECT * FROM contact";
+        Cursor cursor = database.rawQuery(query,null);
+
+        Contact newContact;
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            newContact = new Contact();
+            newContact.setContactId(cursor.getInt(0));
+        newContact.setContactName(cursor.getString(1));
+        newContact.setStreetAddress(cursor.getString(2));
+        newContact.setCity(cursor.getString(3));
+        newContact.setState(cursor.getString(4));
+        newContact.setZipCode(cursor.getString(5));
+        newContact.setPhoneNumber(cursor.getString(6))
+        newContact.setCellNumber(cursor.getString(7));
+        newContact.setEmail(cursor.getString(8));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(Long.valueOf(cursor.getString(9)));
+        newContact.setBirthday(calendar)
+        contacts.add(newContact);
+        cursor.moveToNext();
+        }
+        cursor.close();
+        }
+    catch (Exception e){
+        contacts = new ArrayList<Contact>();
+        }
+    return contacts;
+        }
+
+6.7
+public class ContactAdapter extends RecyclerView.Adapter{
+    private ArrayList<Contact> contactData;
+    private View.OnClickListener mOnItemClickListener;
+
+    public class ContactViewHolder extends RecyclerView.ViewHolder{
+        public TextView textViewContact;
+        public TextView textPhone;
+        public Button deleteBotton;
+        public ContactViewHolder(@NonNull View itemView){
+            super(itemView);
+            textViewContact = itemView.findViewById(R.id.textViewName);
+        textPhone = itemView.findViewById(R.id.textPhoneNumber;
+        deleteButton= itemView.findViewById(R.id.buttonDeleteContact);
+        itemView.setTag(this);
+        itemView.setClickListener(mOnItemClickListener);
+        }
+        public TextView getPhoneTextView(){
+            reeturn textPhone;
+        }
+        public Button getDeleteButton() {
+            return deleteButton;
+        }
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position){
+        ContactViewHolder cvh = (ContactViewHolder) holder;
+        cvh.getContactTextView().setText(contactData.get(position).getContactName());
+        cvh.getPhoneTextView().setText(contactData.get(position).getPhoneNumber);
+        }
+
+        6.8
+@Override
+public void onClick(View view){
+    RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+    int position = viewHolder.getAdapterPosition();
+    int contactid = contacts.get(position).getContactId();
+    Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
+    intent.putExtra("contactID", contactID);
+    startActivity(intent);
+    }
+
+    6.9
+        public Contact getSpecificContact(int contactId){
+        Contact contact = new Contact();
+        String query = "SELECT * FROM contact WHERE_id =" + contactID;
+        Cursor cursor = database.rawQuery(query,null);
+
+        if (cursor.moveToFirst()){
+            contact.setContactID(cursor.getInt(0));
+        contact.setContactName(cursor.getString(1));
+        contact.setStreetAddress(cursor.getString(2));
+        contact.setCity(cursor.getString(3));
+        contact.setState(cursor.getString(4));
+        contact.setZipCode(cursor.getString(5));
+        contact.setPhoneNumber(cursor.getString(6));
+        contact.setCellNumber(cursor.getString(7));
+        contact.setEmail(cursor.getString(8));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeinMillis(Long.valueOf(cursor.getString(9)));
+        contact.setBirthday(calendar);
+
+        cursor.close();
+        }
+        return contact;
+        }
+
+        6.10
+        private void initContact(int id) {
+        ContactDataSource ds = new ContactDataSource(MainActivity.this);
+        try{
+            ds.open();
+            currentContact = ds.getSpecificContact(id);
+            ds.close();
+        }
+        catch (Exception e) {
+            Toast.makeText(this, "Load Contact Failed", Toast.LENGTH_LONG).show();
+        }
+
+        EditText editName = findViewById(R.id.editName);
+        EditText editAddress = findViewById(R.id.editAddress);
+        EditText editCity = findViewById(R.id.editCity);
+        EditText editState = findViewById(R.id.editState);
+        EditText editZipCode= findViewById(R.id.editZipCode);
+        EditText editPhone = findViewById(R.id.editHome);
+        EditText editCell = findViewById(R.id.editCell);
+        EditText editEmail = findViewById(R.id.editEmail);
+        TextView birthDay = findViewById(R.id.textBirthday);
+
+        editName.setText(currentContact.getContactName());
+        editAddress.setText(currentContact.getAddress());
+        editCity.setText(currentContact.getCity());
+        editState.setText(currentContact.getState());
+        editZipCode.setText(currentContact.getZipCode());
+
+        editPhone.setText(currentContact.getPhoneNumber());
+        editCell.setText(currentContact.getCellNumber());
+        editEmail.setText(currentContact.getEMail());
+birthDay.setText(DateFormat.format("MM/dd/yyyy", currentContact.getBirthday().getTimeInMillis()).toString());
+
+    }
+
+    6.11
+        Bundle exras = getIntent().getExtras();
+    if(extras != null){
+        initContact(extras.getInt("contactid"));
+             }
+    else {
+        currentContact = new Contact();
+        }
+    6.12
+    private void initAddContactButton() {
+        Button newContact = findViewById(R.id.buttonAddContact);
+        newContact.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Intent intent = new Intent(ContactListActivity.this, MainActivity.class);
+                startActivity(intent);
+        }
+        });
+        }
+        }
+6.13
+public boolean deleteContact(int contactId) {
+    boolean didDelete = false;
+    try{
+        didDelete = database.delete("contact", "_id=" + contactId, null) > 0;
+        }
+    catch(Exception e) {
+
+        }
+    return didDelete;
+        }
+
+6.14
+public class ContactAdapter extends RecyclerView.Adapter{
+    private ArrayList<Contact> contactData;
+    private View.OnClickListener mOnItemClickListener;
+    private boolean isDeleting;
+    private Context parentContext;
+
+    public ContactAdapter(ArrayList<Contact> arrayList, Context context) {
+        contactData = arrayList;
+        parentContext = context;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        ContactViewHolder cvh = (ContactViewHolder) holder;
+        cvh.getContactTextView().setText(contactData.get(position).getContactName());
+        cvh.getPhoneTextView().setText(contactData.get(position).getPhoneNumber());
+        if (isDeleting) {
+            cvh.getDeleteButton().setVisibility(View.VISIBLE);
+            cvh.getDeleteButton().setOnClickListener(new View.OnClickListener(){
+        @Override
+        public void onClick(View view){
+        deleteItem(position);
+        }
+        });
+            else{
+                cvh.getDeleteButton().setVisibility(View.INVISIBLE);
+        }
+        }
+        public void setDelete(boolean b){
+            isDeleting = b;
+        }
+private void deleteItem(int position){
+            Contact contact = contactData.get(position);
+            ContactDataSource ds = new ContactDataSource(parentContext);
+            try{
+                ds.open();
+                boolean didDelete = ds.deleteContact(contact.getContactID());
+                ds.close();
+                if (didDelete){
+                    contactData.remove(position);
+                    notifyDataSetChanged();
+        }
+                else {
+                    Toast.makeText(parentContext, "Delete Failed!", Toast.LENGTH_LONG.show();
+        }
+        }
+            catch (Exception e){
+                Toast.makeText(parentContext,"Delete Failed!", Toast.LENGTH_LONG.show();
+        }
+        }
+        }
+        6.15
+
+        private void initDeleteSwitch(){
+        Switch s = findViewById(R.id.switchDelete);
+        s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+            @Override
+        public void OnCheckChanged (CompoundButton compounfButton, boolean b){
+        Boolean status=compoundButton.isChecked();
+        contactAdapter.setDelete(status);;
+        contactAdapter.notifyDataSetChanged();
+        }
+        });
+        }
+        }
+
+6.16
+        @Override
+        public void onResume(){
+    super.onResume();
+
+        }
+*/
