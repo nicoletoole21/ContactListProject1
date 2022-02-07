@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 
 
+
 public class ContactDataSource {
 
     private SQLiteDatabase database;
