@@ -59,6 +59,7 @@ public class ContactSettingsActivity extends AppCompatActivity {
         ibSettings.setEnabled(false);
     }
 
+
     private void initSettings() {
 
         String sortBy = getSharedPreferences("MyContactListPreferences",

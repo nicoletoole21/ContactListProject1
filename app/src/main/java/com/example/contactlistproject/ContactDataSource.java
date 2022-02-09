@@ -32,6 +32,7 @@ public class ContactDataSource {
         boolean didSucceed = false;
         try {
             ContentValues initialValues = new ContentValues();
+
             initialValues.put("contactname", c.getContactName());
             initialValues.put("streetaddress", c.getStreetAddress());
             initialValues.put("city", c.getCity());
@@ -41,8 +42,11 @@ public class ContactDataSource {
             initialValues.put("cellnumber", c.getCellNumber());
             initialValues.put("email", c.geteMail());
             initialValues.put("birthday", String.valueOf(c.getBirthday().getTimeInMillis()));
+
             didSucceed = database.insert("contact", null, initialValues) > 0;
-        } catch (Exception e) {
+
+        }
+        catch (Exception e) {
         }
         return didSucceed;
     }
@@ -52,6 +56,7 @@ public class ContactDataSource {
         try {
             Long rowId = (long) c.getContactID();
             ContentValues updateValues = new ContentValues();
+
             updateValues.put("contactname", c.getContactName());
             updateValues.put("streetaddress", c.getStreetAddress());
             updateValues.put("city", c.getCity());
@@ -84,7 +89,9 @@ public class ContactDataSource {
     }
 
     public ArrayList<String> getContactName() {
+
         ArrayList<String> contactNames = new ArrayList<>();
+
         try {
             String query = "Select contactname from contact";
             Cursor cursor = database.rawQuery(query, null);
@@ -95,8 +102,9 @@ public class ContactDataSource {
                 cursor.moveToNext();
             }
             cursor.close();
-        } catch (Exception e) {
-            contactNames = new ArrayList<String>();
+        }
+        catch (Exception e) {
+            contactNames = new ArrayList<>();
         }
         return contactNames;
     }
