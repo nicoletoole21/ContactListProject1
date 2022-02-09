@@ -45,7 +45,8 @@ public class ContactDataSource {
 
             didSucceed = database.insert("contact", null, initialValues) > 0;
 
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
         }
         return didSucceed;
     }
@@ -101,7 +102,8 @@ public class ContactDataSource {
                 cursor.moveToNext();
             }
             cursor.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             contactNames = new ArrayList<>();
         }
         return contactNames;
@@ -109,13 +111,14 @@ public class ContactDataSource {
 
     public ArrayList<Contact> getContacts() {
         ArrayList<Contact> contacts = new ArrayList<Contact>();
-        try {
-            String query = "SELECT * FROM contact";
-            Cursor cursor = database.rawQuery(query, null);
+        try{
+            String query ="SELECT * FROM contact";
+            Cursor cursor = database.rawQuery(query,null);
 
             Contact newContact;
             cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
+            while (!cursor.isAfterLast()){
+
                 newContact = new Contact();
                 newContact.setContactID(cursor.getInt(0));
                 newContact.setContactName(cursor.getString(1));
@@ -129,13 +132,17 @@ public class ContactDataSource {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(Long.valueOf(cursor.getString(9)));
                 newContact.setBirthday(calendar);
+
                 contacts.add(newContact);
                 cursor.moveToNext();
             }
             cursor.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e){
             contacts = new ArrayList<Contact>();
         }
         return contacts;
     }
+
 }
+
