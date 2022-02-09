@@ -33,9 +33,6 @@ public class ContactListActivity extends AppCompatActivity {
         initSettingsButton();
         initMapButton();
 
-
-
-
         ContactDataSource ds = new ContactDataSource(this);
         ArrayList<String> names;
 
@@ -48,6 +45,10 @@ public class ContactListActivity extends AppCompatActivity {
             contactList.setLayoutManager(layoutManager);
             ContactAdapter contactAdapter = new ContactAdapter(names);
             contactList.setAdapter(contactAdapter);
+
+            //Connect the adapter to the setOnItemClickListener
+            contactAdapter.setOnItemClickListener(onItemClickListener);
+
         }
         catch (Exception e) {
             Toast.makeText(this, "Error retrieving contacts", Toast.LENGTH_LONG).show();
