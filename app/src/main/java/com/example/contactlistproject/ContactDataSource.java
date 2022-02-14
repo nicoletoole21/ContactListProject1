@@ -29,7 +29,9 @@ public class ContactDataSource {
     }
 
     public boolean insertContact(Contact c) {
+
         boolean didSucceed = false;
+
         try {
             ContentValues initialValues = new ContentValues();
 
@@ -109,10 +111,12 @@ public class ContactDataSource {
         return contactNames;
     }
 
-    public ArrayList<Contact> getContacts() {
-        ArrayList<Contact> contacts = new ArrayList<Contact>();
+    public ArrayList<Contact> getContacts(String sortField, String sortOrder) {
+
+        ArrayList<Contact> contacts = new ArrayList<>();
+
         try{
-            String query ="SELECT * FROM contact";
+            String query ="SELECT * FROM contact ORDER BY " + sortField + " " + sortOrder;
             Cursor cursor = database.rawQuery(query,null);
 
             Contact newContact;
@@ -139,9 +143,46 @@ public class ContactDataSource {
             cursor.close();
         }
         catch (Exception e){
-            contacts = new ArrayList<Contact>();
+            contacts = new ArrayList<>();
         }
         return contacts;
+    }
+//Returns one contact based on contactID
+    public Contact getSpecificContact (int contactID) {
+
+        Contact contact = new Contact();
+        String query = "SELECT * FROM contact WHERE _id  =" + contactID;
+        Cursor cursor = database.rawQuery(query,null);
+
+        if (cursor.moveToFirst()){
+            contact.setContactID(cursor.getInt(0));
+            contact.setContactName(cursor.getString(1));
+            contact.setStreetAddress(cursor.getString(2));
+            contact.setCity(cursor.getString(3));
+            contact.setState(cursor.getString(4));
+            contact.setZipCode(cursor.getString(5));
+            contact.setPhoneNumber(cursor.getString(6));
+            contact.setCellNumber(cursor.getString(7));
+            contact.seteMail(cursor.getString(8));
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(Long.valueOf(cursor.getString(9)));
+            contact.setBirthday(calendar);
+
+            cursor.close();
+        }
+        return contact;
+    }
+
+    public boolean deleteContact(int contactID) {
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("contact", "_id=" + contactID, null) > 0;
+        }
+        catch (Exception e) {
+            //Do nothing -return value already set to false
+        }
+        return didDelete;
     }
 
 }

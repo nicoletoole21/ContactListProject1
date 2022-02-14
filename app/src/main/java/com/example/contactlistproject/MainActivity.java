@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -30,17 +31,28 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        currentContact = new Contact();
 
         initListButton();
         initMapButton();
         initSettingsButton();
 
         initToggleButton();
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            initContact(extras.getInt("contactID"));
+        }
+        else {
+            currentContact = new Contact();
+        }
+
         setForEditing(false);
         initChangeDateButton();
         initTextChangedEvents();
         initSaveButton();
+
+
+
 
     }
 
@@ -155,13 +167,11 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     private void initTextChangedEvents() {
         final EditText etContactName = findViewById(R.id.editName);
         etContactName.addTextChangedListener(new TextWatcher() {
-
             public void afterTextChanged(Editable s) {
                 currentContact.setContactName(etContactName.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -169,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         });
 
         final EditText etStreetAddress = findViewById(R.id.editAddress);
-
         etStreetAddress.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -177,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -185,14 +193,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         });
 
         final EditText etCity = findViewById(R.id.editCity);
-        etContactName.addTextChangedListener(new TextWatcher() {
-
+        etCity.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 currentContact.setCity(etCity.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -202,14 +208,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         });
 
         final EditText etState = findViewById(R.id.editState);
-        etContactName.addTextChangedListener(new TextWatcher() {
-
+        etState.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 currentContact.setState(etState.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -218,14 +222,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         });
 
         final EditText etZipcode = findViewById(R.id.editZipcode);
-        etContactName.addTextChangedListener(new TextWatcher() {
-
+        etZipcode.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 currentContact.setZipCode(etZipcode.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -234,15 +236,12 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         });
 
         final EditText etHomePhone = findViewById(R.id.editHome);
-
-        etContactName.addTextChangedListener(new TextWatcher() {
-
+        etHomePhone.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 currentContact.setPhoneNumber(etHomePhone.getText().toString());
             }
 
             public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -252,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
         final EditText etCellPhone = findViewById(R.id.editCell);
 
-        etContactName.addTextChangedListener(new TextWatcher() {
+        etCellPhone.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
                 currentContact.setCellNumber(etCellPhone.getText().toString());
@@ -269,8 +268,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
         final EditText eteMail = findViewById(R.id.editEMail);
 
-        etContactName.addTextChangedListener(new TextWatcher() {
-
+        eteMail.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
                 currentContact.seteMail(eteMail.getText().toString());
             }
@@ -292,18 +290,22 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void initSaveButton() {
+
         Button saveButton = findViewById(R.id.butttonSave);
+
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 boolean wasSuccessful;
                 hideKeyboard();
+
                 ContactDataSource ds = new ContactDataSource(MainActivity.this);
                 try {
                     ds.open();
 
                     if (currentContact.getContactID() == -1) {
+
                         wasSuccessful = ds.insertContact(currentContact);
 
                         if (wasSuccessful) {
@@ -312,13 +314,11 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
                             currentContact.setContactID(newId);
                         }
-                    }
-                    else {
+                    } else {
                         wasSuccessful = ds.updateContact(currentContact);
                     }
                     ds.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     wasSuccessful = false;
                 }
 
@@ -330,35 +330,75 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
             }
         });
     }
-private void hideKeyboard() {
-    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-    EditText editName = findViewById(R.id.editName);
-    imm.hideSoftInputFromWindow(editName.getWindowToken(), 0);
 
-    EditText editAddress = findViewById(R.id.editAddress);
-    imm.hideSoftInputFromWindow(editAddress.getWindowToken(), 0);
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        EditText editName = findViewById(R.id.editName);
+        imm.hideSoftInputFromWindow(editName.getWindowToken(), 0);
 
-    EditText editCity = findViewById(R.id.editCity);
-    imm.hideSoftInputFromWindow(editCity.getWindowToken(), 0);
+        EditText editAddress = findViewById(R.id.editAddress);
+        imm.hideSoftInputFromWindow(editAddress.getWindowToken(), 0);
 
-    EditText editState = findViewById(R.id.editState);
-    imm.hideSoftInputFromWindow(editState.getWindowToken(), 0);
+        EditText editCity = findViewById(R.id.editCity);
+        imm.hideSoftInputFromWindow(editCity.getWindowToken(), 0);
 
-    EditText editZipCode = findViewById(R.id.editZipcode);
-    imm.hideSoftInputFromWindow(editZipCode.getWindowToken(), 0);
+        EditText editState = findViewById(R.id.editState);
+        imm.hideSoftInputFromWindow(editState.getWindowToken(), 0);
 
-    EditText editHomeNum = findViewById(R.id.editHome);
-    imm.hideSoftInputFromWindow(editHomeNum.getWindowToken(), 0);
+        EditText editZipCode = findViewById(R.id.editZipcode);
+        imm.hideSoftInputFromWindow(editZipCode.getWindowToken(), 0);
 
-    EditText editCell = findViewById(R.id.editCell);
-    imm.hideSoftInputFromWindow(editCell.getWindowToken(), 0);
+        EditText editHomeNum = findViewById(R.id.editHome);
+        imm.hideSoftInputFromWindow(editHomeNum.getWindowToken(), 0);
 
-    EditText editeMail = findViewById(R.id.editEMail);
-    imm.hideSoftInputFromWindow(editeMail.getWindowToken(), 0);
+        EditText editCell = findViewById(R.id.editCell);
+        imm.hideSoftInputFromWindow(editCell.getWindowToken(), 0);
+
+        EditText editeMail = findViewById(R.id.editEMail);
+        imm.hideSoftInputFromWindow(editeMail.getWindowToken(), 0);
+
+    }
+//Retrieves the contact inputs info in each respective area.
+    private void initContact(int id) {
+
+        ContactDataSource ds = new ContactDataSource(MainActivity.this);
+
+        try{
+            ds.open();
+            currentContact = ds.getSpecificContact(id);
+            ds.close();
+        }
+        catch (Exception e) {
+
+            Toast.makeText(this, "Load Contact Failed", Toast.LENGTH_LONG).show();
+        }
+
+        EditText editName = findViewById(R.id.editName);
+        EditText editAddress = findViewById(R.id.editAddress);
+        EditText editCity = findViewById(R.id.editCity);
+        EditText editState = findViewById(R.id.editState);
+        EditText editZipCode = findViewById(R.id.editZipcode);
+        EditText editPhone = findViewById(R.id.editHome);
+        EditText editCell = findViewById(R.id.editCell);
+        EditText editEmail = findViewById(R.id.editEMail);
+        TextView birthDay = findViewById(R.id.textBirthday);
+
+        editName.setText(currentContact.getContactName());
+        editAddress.setText(currentContact.getStreetAddress());
+        editCity.setText(currentContact.getCity());
+        editState.setText(currentContact.getState());
+        editZipCode.setText(currentContact.getZipCode());
+
+        editPhone.setText(currentContact.getPhoneNumber());
+        editCell.setText(currentContact.getCellNumber());
+        editEmail.setText(currentContact.geteMail());
+        birthDay.setText(DateFormat.format("MM/dd/yyyy", currentContact.getBirthday().getTimeInMillis()).toString());
 
     }
 
 }
+
+
 
 
 
