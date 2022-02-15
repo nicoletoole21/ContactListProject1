@@ -43,6 +43,7 @@ public class ContactAdapter extends RecyclerView.Adapter {
         public TextView getPhoneTextView() {
             return textPhone;
         }
+
         public Button getDeleteButton() {
             return deleteButton;
         }
@@ -71,12 +72,13 @@ public class ContactAdapter extends RecyclerView.Adapter {
         ContactViewHolder cvh = (ContactViewHolder) holder;
         cvh.getContactTextView().setText(contactData.get(position).getContactName());
         cvh.getPhoneTextView().setText(contactData.get(position).getPhoneNumber());
+
         if (isDeleting) {
             cvh.getDeleteButton().setVisibility(View.VISIBLE);
             cvh.getDeleteButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    deleteItem(holder.getAdapterPosition());
+                    deleteItem(position);
                 }
             });
         }

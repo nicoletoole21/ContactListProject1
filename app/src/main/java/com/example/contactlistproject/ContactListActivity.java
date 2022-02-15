@@ -21,7 +21,8 @@ import java.util.ArrayList;
 public class ContactListActivity extends AppCompatActivity {
 
     ArrayList<Contact> contacts;
-    ContactAdapter contactAdapter = new ContactAdapter(contacts, this);
+
+    ContactAdapter contactAdapter = new ContactAdapter(contacts, this) ;
 
 
     private View.OnClickListener onItemClickListener = new View.OnClickListener() {
@@ -48,11 +49,13 @@ public class ContactListActivity extends AppCompatActivity {
         initAddContactButton();
         initDeleteSwitch();
 
+
     }
 
     @Override
     public void onResume () {
         super.onResume();
+
 
         String sortBy = getSharedPreferences("MyContactListPreferences",
                 Context.MODE_PRIVATE).getString("sortfield", "contactname");
@@ -68,17 +71,15 @@ public class ContactListActivity extends AppCompatActivity {
             RecyclerView contactList = findViewById(R.id.rvContacts);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             contactList.setLayoutManager(layoutManager);
-           ContactAdapter contactAdapter = new ContactAdapter(contacts, this);
+            ContactAdapter contactAdapter = new ContactAdapter(contacts, this);
             contactList.setAdapter(contactAdapter);
             contactAdapter.setOnItemClickListener(onItemClickListener);
 
         } catch (Exception e) {
             Toast.makeText(this, "Error retrieving contacts", Toast.LENGTH_LONG).show();
         }
+
     }
-
-
-
 
     private void listButton() {
 
@@ -123,7 +124,7 @@ public class ContactListActivity extends AppCompatActivity {
         });
     }
 
-   private void initDeleteSwitch() {
+    private void initDeleteSwitch() {
         Switch s = findViewById(R.id.switchDelete);
         s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -134,5 +135,7 @@ public class ContactListActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
 
