@@ -37,11 +37,6 @@ import java.util.List;
 
 public class ContactMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-   // LocationManager locationManager;
-   // LocationListener gpsListener;
-  //  LocationListener networkListener;
- //  Location currentBestLocation;
-
     final int PERMISSION_REQUEST_LOCATION = 101;
     GoogleMap gMap;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -49,14 +44,13 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
     LocationCallback locationCallback;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_map);
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        SupportMapFragment mapFragment = (SupportMapFragment)
-        getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         createLocationRequest();
@@ -137,6 +131,7 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
         {
             return ;
         }
+
         fusedLocationProviderClient.removeLocationUpdates(locationCallback);
     }
 

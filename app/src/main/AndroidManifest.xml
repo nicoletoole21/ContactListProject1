@@ -47,7 +47,7 @@
         <uses-library
 
             android:name="org.apache.http.legacy"
-            android:require="false" />
+            android:required="true"/>
 
     </application>
 

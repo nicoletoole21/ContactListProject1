@@ -15,7 +15,8 @@
         app:layout_constraintBottom_toTopOf="@+id/navigationBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        class= "com.google.android.gms.maps.SupportMapFragment"/>
     <LinearLayout
         android:id="@+id/navigationBar"
         android:layout_width="0dp"
