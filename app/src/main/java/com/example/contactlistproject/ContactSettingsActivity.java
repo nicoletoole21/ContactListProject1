@@ -40,7 +40,7 @@ public class ContactSettingsActivity extends AppCompatActivity {
     }
 
     private void initMapButton() {
-        ImageButton ibMap = findViewById(R.id.imageButtonSettings);
+        ImageButton ibMap = findViewById(R.id.imageButtonMap);
         ibMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 //reference created for current activity and which activity to start)

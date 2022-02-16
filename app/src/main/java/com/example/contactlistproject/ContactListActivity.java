@@ -102,7 +102,7 @@ public class ContactListActivity extends AppCompatActivity {
     }
 
     private void initMapButton() {
-        ImageButton ibList = findViewById(R.id.imageButtonSettings);
+        ImageButton ibList = findViewById(R.id.imageButtonMap);
         ibList.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 //reference created for current activity and which activity to start)
