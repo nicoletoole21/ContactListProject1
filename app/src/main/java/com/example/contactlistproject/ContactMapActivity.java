@@ -22,26 +22,46 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.List;
 
-public class ContactMapActivity extends AppCompatActivity {
+public class ContactMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    LocationManager locationManager;
-    LocationListener gpsListener;
-    LocationListener networkListener;
-    Location currentBestLocation;
+   // LocationManager locationManager;
+   // LocationListener gpsListener;
+  //  LocationListener networkListener;
+ //  Location currentBestLocation;
 
     final int PERMISSION_REQUEST_LOCATION = 101;
+    GoogleMap gMap;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    LocationRequest locationRequest;
+    LocationCallback locationCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_map);
 
-        initGetLocationButton();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        SupportMapFragment mapFragment = (SupportMapFragment)
+        getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+        createLocationRequest();
+        createLocationCallback();
+
         buttonMap();
         initListButton();
         initSettingsButton();
@@ -62,71 +82,118 @@ public class ContactMapActivity extends AppCompatActivity {
             return ;
         }
 
-        try {
+       /** try {
             locationManager.removeUpdates(gpsListener);
             locationManager.removeUpdates(networkListener);
         }
         catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
-    private void initGetLocationButton() {
+    private void createLocationRequest() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    }
 
-    Button locationButton = (Button) findViewById(R.id.buttonGetLocation);
-    locationButton.setOnClickListener(new View.OnClickListener() {
+    private void createLocationCallback() {
+        locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    if (locationResult == null) {
+                        return ;
+                    }
+                    for (Location location : locationResult.getLocations()) {
+                        Toast.makeText(getBaseContext(), "Lat: " + location.getLatitude() +
+                                " Long: " + location.getLongitude() +
+                                "Accuracy: " + location.getAccuracy(), Toast.LENGTH_LONG).show();
+                    }
+                };
+            };
+        }
 
-        @Override
-        public void onClick(View v) {
+        private void startLocationUpdates() {
+            if (Build.VERSION.SDK_INT>= 23 && ContextCompat.checkSelfPermission(getBaseContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED)
+            {
+        return ;
+    }
 
-            try {
+  fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+          locationCallback, null);
+            gMap.setMyLocationEnabled(true);
 
-                if (Build.VERSION.SDK_INT >= 23) {
-                    if (ContextCompat.checkSelfPermission(ContactMapActivity.this,
-                            Manifest.permission.ACCESS_FINE_LOCATION) !=
-                            PackageManager.PERMISSION_GRANTED) {
+    }
 
-                        if (ActivityCompat.shouldShowRequestPermissionRationale
-                                (ContactMapActivity.this,
-                                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+    private void stopLocationUpdates() {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getBaseContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) !=PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED)
+        {
+            return ;
+        }
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+    }
 
-                            Snackbar.make(findViewById(R.id.activity_contact_map),
-                                    "MyContactList requires this permission to locate " +
-                                            "your contacts", Snackbar.LENGTH_INDEFINITE)
-                                    .setAction("OK", new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
+    @Override
+    public void onMapReady (GoogleMap googleMap) {
+    gMap = googleMap;
+    gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-                                            ActivityCompat.requestPermissions(
-                                                    ContactMapActivity.this,
-                                                    new String[]{
-                                                            Manifest.permission.ACCESS_FINE_LOCATION},
-                                                    PERMISSION_REQUEST_LOCATION);
+        try {
 
-                                        }
-                                    })
-                                    .show();
-                        } else {
-                            ActivityCompat.requestPermissions(ContactMapActivity.this, new
-                                            String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                    PERMISSION_REQUEST_LOCATION);
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (ContextCompat.checkSelfPermission(ContactMapActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
 
-                        }
+                    if (ActivityCompat.shouldShowRequestPermissionRationale
+                            (ContactMapActivity.this,
+                                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                        Snackbar.make(findViewById(R.id.activity_contact_map),
+                                "MyContactList requires this permission to locate " +
+                                        "your contacts", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("OK", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+
+                                        ActivityCompat.requestPermissions(
+                                                ContactMapActivity.this,
+                                                new String[]{
+                                                        Manifest.permission.ACCESS_FINE_LOCATION},
+                                                PERMISSION_REQUEST_LOCATION);
+
+                                    }
+                                })
+                                .show();
                     } else {
-                        startLocationUpdates();
+                        ActivityCompat.requestPermissions(ContactMapActivity.this, new
+                                        String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                PERMISSION_REQUEST_LOCATION);
+
                     }
                 } else {
                     startLocationUpdates();
                 }
-            } catch (Exception e) {
-                Toast.makeText(getBaseContext(), "Error requesting permission", Toast.LENGTH_LONG).show();
-
+            } else {
+                startLocationUpdates();
             }
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), "Error requesting permission", Toast.LENGTH_LONG).show();
+
         }
-    });
+
+
     }
 
-    private void startLocationUpdates() {
+
+   /** private void startLocationUpdates() {
 
         if (Build.VERSION.SDK_INT >= 23 &&
         ContextCompat.checkSelfPermission(getBaseContext(),
@@ -190,7 +257,7 @@ public class ContactMapActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         }
 
-    }
+    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -207,20 +274,6 @@ public class ContactMapActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    private boolean isBetterLocation(Location location) {
-
-        boolean isBetter = false;
-        if (currentBestLocation == null) {
-            isBetter = true;
-        } else if (location.getAccuracy() <= currentBestLocation.getAccuracy()) {
-            isBetter = true;
-        }
-        else if (location.getTime() - currentBestLocation.getTime() > 5*60*1000) {
-            isBetter = true;
-        }
-        return isBetter;
     }
 
     private void buttonMap() {
@@ -255,6 +308,8 @@ public class ContactMapActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }
 
 
