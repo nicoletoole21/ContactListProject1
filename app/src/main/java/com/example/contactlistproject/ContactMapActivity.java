@@ -57,23 +57,28 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
     Contact currentContact = null;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_map);
+
         Bundle extras = getIntent().getExtras();
         try {
             ContactDataSource ds = new ContactDataSource(ContactMapActivity.this);
             ds.open();
-            if (extras != null
-            ) {
+            if (extras != null) {
                 currentContact = ds.getSpecificContact(extras.getInt("contactid"));
-            } else {
+            }
+
+            else {
                 contacts = ds.getContacts("contactname", "ASC");
             }
             ds.close();
-        } catch (Exception e) {
+
+        }
+        catch (Exception e) {
             Toast.makeText(this, "Contact(s) could not be retrieved.", Toast.LENGTH_LONG).show();
         }
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -85,7 +90,8 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
         buttonMap();
         initListButton();
         initSettingsButton();
-initMapTypeButtons();
+        initMapTypeButtons();
+
     }
 
     @Override
@@ -132,7 +138,6 @@ initMapTypeButtons();
                 }
             }
 
-            ;
         };
     }
 
@@ -165,8 +170,10 @@ initMapTypeButtons();
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
         RadioButton rbNormal = findViewById(R.id.radioButtonNormal);
         rbNormal.setChecked(true);
+
         Point size = new Point();
         WindowManager w = getWindowManager();
         w.getDefaultDisplay().getSize(size);
@@ -175,31 +182,37 @@ initMapTypeButtons();
 
         if (contacts.size() > 0) {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
             for (int i = 0; i < contacts.size(); i++) {
                 currentContact = contacts.get(i);
 
                 Geocoder geo = new Geocoder(this);
-                List<Address> addresses = null;
+                List<Address> address1 = null;
 
                 String address = currentContact.getStreetAddress() + ", " +
                         currentContact.getCity() + ", " +
                         currentContact.getState() + " " +
                         currentContact.getZipCode();
                 try {
-                    addresses = geo.getFromLocationName(address, 1);
+                    address1 = geo.getFromLocationName(address, 1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                LatLng point = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-                builder.include(point);
 
-                gMap.addMarker(new MarkerOptions().position(point).title(currentContact.getContactName()).snippet(address));
+               // LatLng point = new LatLng(address1.get(0).getLatitude(), address1.get(0).getLongitude());
+              //  builder.include(point);
+
+               // gMap.addMarker(new MarkerOptions().position(point).title(currentContact.getContactName()).snippet(address));
 
             }
-            gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
-                    measuredWidth, measuredHeight, 450));
-        } else {
+
+          //  gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
+             //       measuredWidth, measuredHeight, 450));
+
+        } else
+            {
             if (currentContact != null) {
+
                 Geocoder geo = new Geocoder(this);
                 List<Address> addresses = null;
                 String address = currentContact.getStreetAddress() + ", " +
@@ -277,76 +290,9 @@ initMapTypeButtons();
 
     }
 
-
-        /** private void startLocationUpdates() {
-
-         if (Build.VERSION.SDK_INT >= 23 &&
-         ContextCompat.checkSelfPermission(getBaseContext(),
-         Manifest.permission.ACCESS_FINE_LOCATION) !=
-         PackageManager.PERMISSION_GRANTED &&
-         ContextCompat.checkSelfPermission(getBaseContext(),
-         Manifest.permission.ACCESS_COARSE_LOCATION) !=
-         PackageManager.PERMISSION_GRANTED)  {
-         return ;
-         }
-
-         try {
-         locationManager = (LocationManager) getBaseContext().getSystemService(Context.LOCATION_SERVICE);
-         gpsListener = new LocationListener() {
-         public void onLocationChanged(Location location) {
-
-         if (isBetterLocation(location)) {
-         currentBestLocation = location;
-
-         TextView txtLatitude = (TextView) findViewById(R.id.textLatitude);
-         TextView txtLongitude = (TextView) findViewById(R.id.textLongitude);
-         TextView txtAccuracy = (TextView) findViewById(R.id.textAccuracy);
-
-         txtLatitude.setText(String.valueOf(location.getLatitude()));
-         txtLongitude.setText(String.valueOf(location.getLongitude()));
-         txtAccuracy.setText(String.valueOf(location.getAccuracy()));
-         }
-
-         }
-
-         public void onStatusChanged(String provider, int status, Bundle extras) {}
-         public void onProviderEnabled(String provider) {}
-         public void onProviderDisabled(String provider) {}
-         };
-
-         networkListener = new LocationListener() {
-         public void onLocationChanged(Location location) {
-         TextView txtLatitude = (TextView) findViewById(R.id.textLatitude);
-         TextView txtLongitude = (TextView) findViewById(R.id.textLongitude);
-         TextView txtAccuracy = (TextView) findViewById(R.id.textAccuracy);
-
-         txtLatitude.setText(String.valueOf(location.getLatitude()));
-         txtLongitude.setText(String.valueOf(location.getLongitude()));
-         txtAccuracy.setText(String.valueOf(location.getAccuracy()));
-
-         }
-
-         public void onStatusChanged(String provider, int status, Bundle extras) {}
-         public void onProviderEnabled(String provider) {}
-         public void onProviderDisabled(String provider) {}
-         };
-
-         locationManager.requestLocationUpdates(
-         LocationManager.GPS_PROVIDER, 0, 0, gpsListener);
-
-         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,networkListener);
-
-
-         } catch (Exception e) {
-         Toast.makeText(getBaseContext(), "Error, Location not available",
-         Toast.LENGTH_LONG).show();
-         }
-
-         }*/
-
         @Override
-        public void onRequestPermissionsResult ( int requestCode, String permissions[],
-        int[] grantResults){
+        public void onRequestPermissionsResult (int requestCode, String[] permissions,
+                                                int[] grantResults){
 
             switch (requestCode) {
                 case PERMISSION_REQUEST_LOCATION: {
@@ -406,7 +352,7 @@ private void initMapTypeButtons() {
                     else{
                         gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                 }
-            };
+            }
 
             });
 }

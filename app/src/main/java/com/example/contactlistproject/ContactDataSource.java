@@ -13,7 +13,7 @@ import java.util.Calendar;
 public class ContactDataSource {
 
     private SQLiteDatabase database;
-    private ContactDBHelper dbHelper;
+    private final ContactDBHelper dbHelper;
 
     public ContactDataSource(Context context) {
         dbHelper = new ContactDBHelper(context);

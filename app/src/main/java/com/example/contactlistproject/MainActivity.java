@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         initTextChangedEvents();
         initSaveButton();
 
-
-System.out.println("Hello");
-
     }
 
     private void initListButton() {

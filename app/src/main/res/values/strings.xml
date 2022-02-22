@@ -10,4 +10,6 @@
     <string name="button_to_display_the_settings1">Button to display the settings</string>
     <string name="textview">TextView</string>
     <string name="delete">Delete</string>
+    <string name="delete1">Delete:</string>
+    <string name="new1">New</string>
 </resources>

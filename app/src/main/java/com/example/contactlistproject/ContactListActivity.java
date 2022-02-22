@@ -6,6 +6,7 @@ import androidx.collection.CircularArray;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,14 +19,15 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+
 public class ContactListActivity extends AppCompatActivity {
 
     ArrayList<Contact> contacts;
+    ContactAdapter contactAdapter;
+    RecyclerView contactList;
 
-    ContactAdapter contactAdapter = new ContactAdapter(contacts, this) ;
 
-
-    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+    private final View.OnClickListener onItemClickListener = new View.OnClickListener() {
 
         //PASSES THE CONTACTID TO THE NEXT SCREEN
         @Override
@@ -43,19 +45,18 @@ public class ContactListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
+
         listButton();
         initSettingsButton();
         initMapButton();
         initAddContactButton();
         initDeleteSwitch();
 
-
     }
 
     @Override
-    public void onResume () {
+    public void onResume() {
         super.onResume();
-
 
         String sortBy = getSharedPreferences("MyContactListPreferences",
                 Context.MODE_PRIVATE).getString("sortfield", "contactname");
@@ -68,11 +69,12 @@ public class ContactListActivity extends AppCompatActivity {
             ds.open();
             contacts = ds.getContacts(sortBy, sortOrder);
             ds.close();
-            RecyclerView contactList = findViewById(R.id.rvContacts);
+            contactList = findViewById(R.id.rvContacts);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             contactList.setLayoutManager(layoutManager);
-            ContactAdapter contactAdapter = new ContactAdapter(contacts, this);
+            contactAdapter = new ContactAdapter(contacts, this);
             contactList.setAdapter(contactAdapter);
+
             contactAdapter.setOnItemClickListener(onItemClickListener);
 
         } catch (Exception e) {
@@ -81,10 +83,9 @@ public class ContactListActivity extends AppCompatActivity {
 
     }
 
+    //BUTTONS
     private void listButton() {
-
         ImageButton ibList = findViewById(R.id.imageButtonList);
-
         ibList.setEnabled(false);
     }
 
@@ -124,7 +125,7 @@ public class ContactListActivity extends AppCompatActivity {
         });
     }
 
-    private void initDeleteSwitch() {
+ private void initDeleteSwitch() {
         Switch s = findViewById(R.id.switchDelete);
         s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -135,7 +136,6 @@ public class ContactListActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }
 
