@@ -53,6 +53,7 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
     LocationCallback locationCallback;
+
     ArrayList<Contact> contacts = new ArrayList<>();
     Contact currentContact = null;
 
@@ -145,7 +146,8 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getBaseContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
+                PackageManager.PERMISSION_GRANTED)
+        {
             return;
         }
 
@@ -155,11 +157,31 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
 
     }
 
+    @Override
+    public void onRequestPermissionsResult (int requestCode, String permissions[],
+                                            int[] grantResults){
+
+        switch (requestCode) {
+            case PERMISSION_REQUEST_LOCATION: {
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startLocationUpdates();
+
+                } else {
+                    Toast.makeText(ContactMapActivity.this,
+                            "MyContactList will not locate your contacts.",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
     private void stopLocationUpdates() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getBaseContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED) {
+                        PackageManager.PERMISSION_GRANTED)
+        {
             return;
         }
 
@@ -171,7 +193,7 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
         gMap = googleMap;
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        RadioButton rbNormal = findViewById(R.id.radioButtonNormal);
+       RadioButton rbNormal = findViewById(R.id.radioButtonNormal);
         rbNormal.setChecked(true);
 
         Point size = new Point();
@@ -193,21 +215,23 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
                         currentContact.getCity() + ", " +
                         currentContact.getState() + " " +
                         currentContact.getZipCode();
+
+
                 try {
                     address1 = geo.getFromLocationName(address, 1);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-               // LatLng point = new LatLng(address1.get(0).getLatitude(), address1.get(0).getLongitude());
-              //  builder.include(point);
+               LatLng point = new LatLng(address1.get(0).getLatitude(), address1.get(0).getLongitude());
+               builder.include(point);
 
-               // gMap.addMarker(new MarkerOptions().position(point).title(currentContact.getContactName()).snippet(address));
+               gMap.addMarker(new MarkerOptions().position(point).title(currentContact.getContactName()).snippet(address));
 
             }
 
-          //  gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
-             //       measuredWidth, measuredHeight, 450));
+           gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
+                   measuredWidth, measuredHeight, 450));
 
         } else
             {
@@ -244,6 +268,8 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
                 alertDialog.show();
             }
         }
+
+        //7.6
         try {
 
             if (Build.VERSION.SDK_INT >= 23) {
@@ -275,7 +301,6 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
                         ActivityCompat.requestPermissions(ContactMapActivity.this, new
                                         String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                 PERMISSION_REQUEST_LOCATION);
-
                     }
                 } else {
                     startLocationUpdates();
@@ -283,30 +308,14 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
             } else {
                 startLocationUpdates();
             }
-        } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Error requesting permission", Toast.LENGTH_LONG).show();
+        }
+        catch (Exception e) {
 
+            Toast.makeText(getBaseContext(), "Error requesting permission", Toast.LENGTH_LONG).show();
         }
 
     }
 
-        @Override
-        public void onRequestPermissionsResult (int requestCode, String[] permissions,
-                                                int[] grantResults){
-
-            switch (requestCode) {
-                case PERMISSION_REQUEST_LOCATION: {
-                    if (grantResults.length > 0 &&
-                            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        startLocationUpdates();
-                    } else {
-                        Toast.makeText(ContactMapActivity.this,
-                                "MyContactList will not locate your contacts.",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        }
 
         private void buttonMap () {
 
@@ -340,7 +349,7 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
                 }
             });
         }
-private void initMapTypeButtons() {
+        private void initMapTypeButtons() {
             RadioGroup rgMapType = findViewById(R.id.radioGroupMapType);
             rgMapType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override

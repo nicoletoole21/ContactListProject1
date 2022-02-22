@@ -12,4 +12,5 @@
     <string name="delete">Delete</string>
     <string name="delete1">Delete:</string>
     <string name="new1">New</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
