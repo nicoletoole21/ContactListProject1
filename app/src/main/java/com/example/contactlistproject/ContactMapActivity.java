@@ -53,7 +53,6 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
     FusedLocationProviderClient fusedLocationProviderClient;
     LocationRequest locationRequest;
     LocationCallback locationCallback;
-
     ArrayList<Contact> contacts = new ArrayList<>();
     Contact currentContact = null;
 
@@ -67,21 +66,19 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
             ContactDataSource ds = new ContactDataSource(ContactMapActivity.this);
             ds.open();
             if (extras != null) {
-                currentContact = ds.getSpecificContact(extras.getInt("contactid"));
+                currentContact = ds.getSpecificContact(extras.getInt("contactID"));
             }
-
             else {
                 contacts = ds.getContacts("contactname", "ASC");
             }
             ds.close();
-
         }
         catch (Exception e) {
             Toast.makeText(this, "Contact(s) could not be retrieved.", Toast.LENGTH_LONG).show();
+
         }
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -109,13 +106,6 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
             return;
         }
 
-        /** try {
-         locationManager.removeUpdates(gpsListener);
-         locationManager.removeUpdates(networkListener);
-         }
-         catch (Exception e) {
-         e.printStackTrace();
-         }*/
     }
 
     private void createLocationRequest() {
@@ -130,35 +120,47 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
             @Override
             public void onLocationResult(LocationResult locationResult) {
                 if (locationResult == null) {
-                    return;
+                    return ;
                 }
                 for (Location location : locationResult.getLocations()) {
                     Toast.makeText(getBaseContext(), "Lat: " + location.getLatitude() +
                             " Long: " + location.getLongitude() +
-                            "Accuracy: " + location.getAccuracy(), Toast.LENGTH_LONG).show();
+                            "Accuracy: " + location.getAccuracy(),Toast.LENGTH_LONG).show();
                 }
-            }
+            };
 
         };
     }
 
     private void startLocationUpdates() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getBaseContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                Manifest.permission.ACCESS_FINE_LOCATION) !=PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission( getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED)
         {
-            return;
+            return ;
         }
-
         fusedLocationProviderClient.requestLocationUpdates(locationRequest,
                 locationCallback, null);
         gMap.setMyLocationEnabled(true);
 
     }
+    private void stopLocationUpdates() {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.
+                checkSelfPermission(getBaseContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION) !=PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED)
+        {
+            return ;
+        }
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+
+    }
+
 
     @Override
-    public void onRequestPermissionsResult (int requestCode, String permissions[],
+    public void onRequestPermissionsResult (int requestCode, String[] permissions,
                                             int[] grantResults){
 
         switch (requestCode) {
@@ -176,100 +178,88 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-    private void stopLocationUpdates() {
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getBaseContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getBaseContext(), Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED)
-        {
-            return;
-        }
-
-        fusedLocationProviderClient.removeLocationUpdates(locationCallback);
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         gMap = googleMap;
         gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
-       RadioButton rbNormal = findViewById(R.id.radioButtonNormal);
-        rbNormal.setChecked(true);
 
         Point size = new Point();
         WindowManager w = getWindowManager();
         w.getDefaultDisplay().getSize(size);
-        int measuredWidth = size.x;
-        int measuredHeight = size.y;
+        int measureWidth = size.x;
+        int measureHeight = size.y;
 
-        if (contacts.size() > 0) {
+        if (contacts.size()>0) {
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
-            for (int i = 0; i < contacts.size(); i++) {
+            for (int i=0; i<contacts.size(); i++) {
                 currentContact = contacts.get(i);
 
                 Geocoder geo = new Geocoder(this);
-                List<Address> address1 = null;
-
-                String address = currentContact.getStreetAddress() + ", " +
-                        currentContact.getCity() + ", " +
-                        currentContact.getState() + " " +
-                        currentContact.getZipCode();
-
-
-                try {
-                    address1 = geo.getFromLocationName(address, 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-               LatLng point = new LatLng(address1.get(0).getLatitude(), address1.get(0).getLongitude());
-               builder.include(point);
-
-               gMap.addMarker(new MarkerOptions().position(point).title(currentContact.getContactName()).snippet(address));
-
-            }
-
-           gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
-                   measuredWidth, measuredHeight, 450));
-
-        } else
-            {
-            if (currentContact != null) {
-
-                Geocoder geo = new Geocoder(this);
                 List<Address> addresses = null;
+
                 String address = currentContact.getStreetAddress() + ", " +
                         currentContact.getCity() + ", " +
                         currentContact.getState() + " " +
                         currentContact.getZipCode();
+
                 try {
                     addresses = geo.getFromLocationName(address, 1);
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                LatLng point = new LatLng(addresses.get(0).getLatitude(),
+                        addresses.get(0).getLongitude());
+                builder.include(point);
+
+                gMap.addMarker(new MarkerOptions().position(point).title(currentContact.getContactName()).snippet(address));
+            }
+
+            gMap.animateCamera(CameraUpdateFactory.newLatLngBounds(builder.build(),
+                    measureWidth, measureHeight, 450));
+
+        }
+        else {
+            if (currentContact != null) {
+                Geocoder geo = new Geocoder(this);
+                List<Address> addresses = null;
+
+                String address = currentContact.getStreetAddress() + ", " +
+                        currentContact.getCity() + ", " +
+                        currentContact.getState() + " " +
+                        currentContact.getZipCode();
+
+                try {
+                    addresses = geo.getFromLocationName(address, 1);
+                }
+                catch (IOException e) {
                     e.printStackTrace();
                 }
                 LatLng point = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
 
-
                 gMap.addMarker(new MarkerOptions().position(point).title(currentContact.getContactName()).snippet(address));
-                gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point, 16));
-
-            } else {
-                AlertDialog alertDialog = new AlertDialog.Builder(
+                gMap.animateCamera(CameraUpdateFactory. newLatLngZoom(point, 16));
+            }
+            else {
+                AlertDialog alertDialog = new AlertDialog.Builder (
                         ContactMapActivity.this).create();
-                alertDialog.setTitle("No Data");
-                alertDialog.setMessage("No data is available for the mapping function");
+
+                alertDialog.setTitle("No data");
+                alertDialog.setMessage("No data is available for mapping function.");
                 alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,
                         "OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
                                 finish();
-                            }
-                        });
+                            }});
                 alertDialog.show();
             }
         }
 
-        //7.6
+
+        //7.6 - Permissions
         try {
 
             if (Build.VERSION.SDK_INT >= 23) {
@@ -320,7 +310,6 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
         private void buttonMap () {
 
             ImageButton ibMap = findViewById(R.id.imageButtonMap);
-
             ibMap.setEnabled(false);
         }
 

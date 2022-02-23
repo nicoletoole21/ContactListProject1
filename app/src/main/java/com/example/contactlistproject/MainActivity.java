@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         initListButton();
         initMapButton();
         initSettingsButton();
-
         initToggleButton();
 
         Bundle extras = getIntent().getExtras();
@@ -70,17 +69,15 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void initMapButton() {
-        ImageButton ibList = findViewById(R.id.imageButtonSettings);
-        ibList.setOnClickListener(new View.OnClickListener() {
+        ImageButton ibMap = findViewById(R.id.imageButtonMap);
+        ibMap.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                //reference created for current activity and which activity to start)
                 Intent intent = new Intent(MainActivity.this, ContactMapActivity.class);
-                //intent flag set to alert the operating system to not make multiple copies of same activity
                if (currentContact.getContactID() == -1) {
             Toast.makeText(getBaseContext(), "Contact must be saved before it can be mapped", Toast.LENGTH_LONG).show();
                 }
                 else{
-                    intent.putExtra("contactid", currentContact.getContactID());
+                    intent.putExtra("contactID", currentContact.getContactID());
                     }
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
@@ -105,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void initToggleButton() {
-        final ToggleButton editToggle = (ToggleButton) findViewById(R.id.toggleButtonEdit);
+        final ToggleButton editToggle = findViewById(R.id.toggleButtonEdit);
         editToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
