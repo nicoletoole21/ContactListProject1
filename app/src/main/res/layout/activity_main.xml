@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -109,12 +110,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:ems="14"
                 android:hint="Name"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
+                android:minHeight="48dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textContact">
 
@@ -138,12 +139,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp"
                 android:ems="16"
                 android:hint="Enter Street Address"
                 android:imeOptions="actionNext"
                 android:inputType="textPersonName"
+                android:minHeight="48dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textAddress">
 
@@ -159,6 +160,7 @@
                 android:hint="City"
                 android:imeOptions="actionNext"
                 android:inputType="textCapWords"
+                android:minHeight="48dp"
                 android:nextFocusDown="@+id/editState"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editAddress">
@@ -176,6 +178,8 @@
                 android:imeOptions="actionNext"
                 android:inputType="textCapCharacters"
                 android:maxLength="2"
+                android:minWidth="48dp"
+                android:minHeight="48dp"
                 android:nextFocusDown="@+id/editZipcode"
                 app:layout_constraintStart_toEndOf="@id/editCity"
                 app:layout_constraintTop_toBottomOf="@+id/editAddress">
@@ -193,6 +197,7 @@
                 android:imeOptions="actionNext"
                 android:inputType="number"
                 android:maxLength="5"
+                android:minHeight="48dp"
                 android:nextFocusDown="@+id/editHome"
                 app:layout_constraintStart_toEndOf="@id/editState"
                 app:layout_constraintTop_toBottomOf="@+id/editAddress">
@@ -219,9 +224,11 @@
                 android:imeOptions="actionNext"
                 android:inputType="phone"
                 android:maxLength="14"
+                android:minHeight="48dp"
                 android:nextFocusDown="@+id/editCell"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textHome" />
+                app:layout_constraintTop_toBottomOf="@+id/textHome"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/textCell"
@@ -240,9 +247,11 @@
                 android:layout_marginStart="2dp"
                 android:ems="8"
                 android:inputType="phone"
+                android:minHeight="48dp"
                 android:nextFocusDown="@+id/editEMail"
                 app:layout_constraintStart_toStartOf="@id/textCell"
-                app:layout_constraintTop_toBottomOf="@+id/textCell" />
+                app:layout_constraintTop_toBottomOf="@+id/textCell"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/textEMail"
@@ -263,8 +272,10 @@
                 android:ems="16"
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
+                android:minHeight="48dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textEMail" />
+                app:layout_constraintTop_toBottomOf="@id/textEMail"
+                tools:ignore="SpeakableTextPresentCheck" />
 
             <TextView
                 android:id="@+id/textBday"
@@ -294,6 +305,17 @@
                 android:text="Change"
                 app:layout_constraintBaseline_toBaselineOf="@id/textBirthday"
                 app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageButton
+                android:id="@+id/imageContact"
+                android:layout_width="63dp"
+                android:layout_height="84dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/R"
+                tools:ignore="SpeakableTextPresentCheck" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,6 +37,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/textBatteryLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="100%"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAddContact"
+            app:layout_constraintStart_toEndOf="@+id/switchDelete"
+            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBaseline_to_toBaselineOf="@+id/switch/Delete"
+        app:layout_constraintEnd_toStartOf="@+id/buttonAddContact"
+        app:layout_constraintStart_toEndOf="@+id/switchDelete"
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout

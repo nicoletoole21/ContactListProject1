@@ -11,6 +11,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -55,7 +59,10 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
     LocationCallback locationCallback;
     ArrayList<Contact> contacts = new ArrayList<>();
     Contact currentContact = null;
-
+SensorManager sensorManager;
+Sensor accelorometer;
+Sensor magnetometer;
+TextView textDirection;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,13 +74,11 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
             ds.open();
             if (extras != null) {
                 currentContact = ds.getSpecificContact(extras.getInt("contactID"));
-            }
-            else {
+            } else {
                 contacts = ds.getContacts("contactname", "ASC");
             }
             ds.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Toast.makeText(this, "Contact(s) could not be retrieved.", Toast.LENGTH_LONG).show();
 
         }
@@ -89,8 +94,18 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
         initListButton();
         initSettingsButton();
         initMapTypeButtons();
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelorometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-    }
+        if (accelorometer != null && magnetometer != null) {
+            sensorManager.registerListener(mySensorEventListener, accelorometer, SensorManager.SENSOR_DELAY_FASTEST);
+            sensorManager.registerListener(mySensorEventListener, magnetometer, SensorManager.SENSOR_DELAY_FASTEST);
+        } else {
+            Toast.makeText(this,"Sensors not found", Toast.LENGTH_LONG).show();
+        }
+        textDirection = (TextView) findViewById(R.id.textHeading);
+        }
 
     @Override
     public void onPause() {
@@ -107,7 +122,41 @@ public class ContactMapActivity extends AppCompatActivity implements OnMapReadyC
         }
 
     }
+private SensorEventListener mySensorEventListener = new SensorEventListener() {
 
+        public void onAccuracyChanged(Sensor sensor, int accuracy){  }
+        float[] accelerometerValues;
+        float[] magneticValues;
+
+        public void onSensorChanged(SensorEvent event){
+            if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+                accelerometerValues = event.values;
+            if(event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+                magneticValues = event.values;
+            if(accelerometerValues!= null && magneticValues!= null){
+                float R[] = new float[9];
+                float I[] = new float[9];
+                boolean success = SensorManager.getRotationMatrix(R, I, accelerometerValues,magneticValues);
+
+                if(success) {
+                    float orientation [] = new float[3];
+                    SensorManager.getOrientation(R, orientation);
+
+                    float azimut = (float) Math.toDegrees(orientation[0]);
+                    if (azimut < 0.0f) {azimut+=360.0f;}
+                        String direction;
+                    if (azimut >= 315 || azimut < 45) {direction = "N"; }
+                    else if (azimut >= 225 && azimut < 315) { direction = "W"; }
+                    else if (azimut >= 135 && azimut < 225) { direction = "S";}
+                    else { direction = "E"; }
+                    textDirection.setText(direction);
+
+
+
+                }
+            }
+        }
+    };
     private void createLocationRequest() {
         locationRequest = LocationRequest.create();
         locationRequest.setInterval(10000);
