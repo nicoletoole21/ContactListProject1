@@ -5,9 +5,9 @@
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/activity_contact_list.xml" value="0.25893856009798694" />
-        <entry key="app/src/main/res/layout/activity_contact_map.xml" value="0.22967735860836086" />
+        <entry key="app/src/main/res/layout/activity_contact_map.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_contact_settings.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1889763779527559" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.22" />
         <entry key="app/src/main/res/layout/select_date.xml" value="0.1828774062816616" />
         <entry key="app/src/main/res/layout/simple_item_view.xml" value="0.1" />

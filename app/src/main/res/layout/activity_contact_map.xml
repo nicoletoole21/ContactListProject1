@@ -41,6 +41,17 @@
 
     </RadioGroup>
 
+    <TextView
+        android:id="@+id/textHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="WNW"/>
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintEnd_to_toEndOf="@+id/map"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="@+id/map"
+
     <LinearLayout
         android:id="@+id/navigationBar"
         android:layout_width="0dp"
@@ -79,8 +90,6 @@
             tools:ignore="RedundantDescriptionCheck" />
 
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
