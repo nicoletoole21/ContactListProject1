@@ -488,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
                 }
                 return;
             }*/
-
+//
         }
     }
 /*public void takePhoto(){
